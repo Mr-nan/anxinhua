@@ -2,6 +2,8 @@ import React,{Component} from 'react'
 import {StyleSheet,View,Image,TouchableOpacity,Text,ScrollView,DeviceEventEmitter} from 'react-native'
 import {SafeAreaView} from 'react-navigation';
 import {getPixel,screenWidth,getData,CellItemView,showPhone} from '../communal'
+import *as api from '../netWork/api';
+let url =  api.webHelp;
 
 class MePage extends Component {
     
@@ -47,7 +49,7 @@ class MePage extends Component {
                     </View>
                     <View style={{marginVertical:getPixel(20),backgroundColor:'white'}}>
                         <CellItemView title="帮助与反馈"  imag={require('../image/wode-3.png')} click={()=>{
-                            this.props.navigation.push('Web',{webURL:'http://39.106.116.0/help'})
+                            this.props.navigation.push('Web',{webURL:url})
                         }}/>
                         <View style={{marginLeft:getPixel(23),height:getPixel(1),backgroundColor:'#f5f5f5',flex:1}}/>
                         <CellItemView title="更多" imag={require('../image/wode-4.png')} click={()=>{

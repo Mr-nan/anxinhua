@@ -3,9 +3,10 @@ import {StyleSheet,View,DeviceEventEmitter} from 'react-native'
 import { WebView } from 'react-native-webview';
 import {SafeAreaView} from 'react-navigation';
 import {getTitlePixel,NavigationHeadView,getData,screenWidth, getPixel} from '../communal';
-import {Lottie} from '../communal'
+import {Lottie} from '../communal';
+import *as api from '../netWork/api';
 
-let url =  "http://39.106.116.0/?tab=1";
+let url =  api.webHome;
 
 class HomePage extends Component {
         constructor(props){
@@ -19,7 +20,7 @@ class HomePage extends Component {
           
             getData('loginKey').then(data=>{
                 if(data){
-                    url+="&mobile="+data;
+                    url+="?&mobile="+data;
                 }
                 this.setState({
                    phoneNumber:data
@@ -29,7 +30,9 @@ class HomePage extends Component {
            
            this.loginAction = DeviceEventEmitter.addListener('loginAction', (data) => {
             if(data){
-                url+="&mobile="+data;
+                url+="?&mobile="+data;
+            }else{
+                url = api.webHome;
             }
             this.setState({
                    phoneNumber:data
@@ -48,18 +51,21 @@ class HomePage extends Component {
             return(
             <View style={styles.container}>
                {
-                   this.state.request.navigationType=='click' && 
+                   this.state.request.url!=url && 
                     <NavigationHeadView title={this.state.request.title} backClick={()=>{
                         this.web.goBack();
                     }}/>
                 } 
                 <SafeAreaView style={[{
-                        backgroundColor: 'white', flex: 1},this.state.request.navigationType=='click' &&{marginTop:getTitlePixel(64)}]}
-                     forceInset={{top: this.state.request.navigationType=='click'?'never':'always', bottom: 'never'}}>
+                        backgroundColor: 'white', flex: 1},this.state.request.url!=url &&{marginTop:getTitlePixel(64)}]}
+                     forceInset={{top: this.state.request.url!=url?'never':'always', bottom: 'never'}}>
                      <WebView ref={(ref)=>{this.web=ref}} source = { { uri:url}}
                      onShouldStartLoadWithRequest={(request)=>{
-                         console.log('------------',request);
-                         if(!this.state.phoneNumber && request.navigationType=='click'){
+                         console.log('------------url',url);
+                         console.log('------------this.state.phoneNumber',this.state.phoneNumber);
+                         console.log('------------request.url',request.url);
+                         if(!this.state.phoneNumber && request.url!=url){
+                             console.log('------------Login',);
                             this.props.navigation.push('Login');
                             return false;
                          }

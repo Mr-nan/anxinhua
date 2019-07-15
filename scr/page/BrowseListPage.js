@@ -19,9 +19,9 @@ class BrowseListPage extends Component {
     componentDidMount(){
 
          getData('loginKey').then(data=>{
-            if(!data){
+            if(data){
                 this.lottie.show(true);
-                fetch.getBrowseData('18210025481').then(res=>{
+                fetch.getBrowseData('15010222222').then(res=>{
                     this.lottie.show(false);
                     this.setState({
                         data:res

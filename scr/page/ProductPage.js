@@ -4,6 +4,8 @@ import { WebView } from 'react-native-webview';
 import {SafeAreaView} from 'react-navigation';
 import {getTitlePixel,NavigationHeadView,getData} from '../communal';
 import {Lottie} from '../communal'
+import *as api from '../netWork/api';
+let url =  api.webProduct;
 
 class ProductPage extends Component {
     
@@ -17,13 +19,24 @@ class ProductPage extends Component {
     componentDidMount(){
 
         getData('loginKey').then(data=>{
+            if(data){
+                url+="?&mobile="+data;
+            }
+            this.setState({
+               phoneNumber:data
+           })
            this.setState({
                phoneNumber:data
            })
        });
        
        this.loginAction = DeviceEventEmitter.addListener('loginAction', (msg) => {
-           this.setState({
+        if(data){
+            url+="?&mobile="+data;
+        }else{
+            url = api.webProduct;
+        }
+        this.setState({
                phoneNumber:msg
            })
        });
@@ -37,25 +50,31 @@ class ProductPage extends Component {
         return(
         <View style={styles.container}>
            {
-               this.state.request.navigationType=='click' && 
+               this.state.request.url!=url && 
                 <NavigationHeadView title={this.state.request.title} backClick={()=>{
                     this.web.goBack();
                 }}/>
             } 
             <SafeAreaView style={[{
-                    backgroundColor: 'white', flex: 1},this.state.request.navigationType=='click' &&{marginTop:getTitlePixel(64)}]}
-                 forceInset={{top: this.state.request.navigationType=='click'?'never':'always', bottom: 'never'}}>
-                 <WebView ref={(ref)=>{this.web=ref}} source = { { uri:'http://39.106.116.0/?tab=2'} } 
+                    backgroundColor: 'white', flex: 1},this.state.request.url!=url &&{marginTop:getTitlePixel(64)}]}
+                 forceInset={{top: this.state.request.url!=url?'never':'always', bottom: 'never'}}>
+                 <WebView ref={(ref)=>{this.web=ref}} source = { { uri:url} } 
                  onShouldStartLoadWithRequest={(request)=>{
-                     if(!this.state.phoneNumber && request.navigationType=='click'){
+                    
+                     if(!this.state.phoneNumber && this.request.url!=url){
                         this.props.navigation.push('Login');
                         return false;
                      }
+
                      this.setState({
                         request:request
                      })
+                     
                     return true;
                  }} 
+                 onMessage={(data)=>{
+                    console.log('------------onMessage',data);
+                 }}
                  onLoad={()=>{
                     this.lottie.show(true);
                  }}

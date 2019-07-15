@@ -2,6 +2,8 @@ import React,{Component} from 'react'
 import {StyleSheet,View,ScrollView,TouchableOpacity,Text,DeviceEventEmitter} from 'react-native'
 import {SafeAreaView} from 'react-navigation';
 import {getPixel,NavigationHeadView,CellItemView,getTitlePixel,moveData,getData} from '../communal'
+import *as api from '../netWork/api';
+let url =  api.webAbout;
 
 class MorePage extends Component {
 
@@ -31,7 +33,7 @@ class MorePage extends Component {
                 <ScrollView>
                  <View style={{marginVertical:getPixel(20),backgroundColor:'white'}}>
                         <CellItemView title="关于我们"  imag={require('../image/gengduo-1.png')} click={()=>{
-                            this.props.navigation.push('Web',{webURL:'http://39.106.116.0/about'})
+                            this.props.navigation.push('Web',{webURL:url})
                         }}/>
                         <View style={{marginLeft:getPixel(23),height:getPixel(1),backgroundColor:'#f5f5f5',flex:1}}/>
                         <CellItemView title="当前版本" imag={require('../image/gengduo-2.png')} content="v1.0" hide={true}/>

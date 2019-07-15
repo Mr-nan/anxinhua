@@ -3,7 +3,9 @@ import {StyleSheet,View,Text,Image,TouchableOpacity,TextInput,ScrollView,DeviceE
 import {SafeAreaView} from 'react-navigation';
 import {getPixel,screenWidth,screenHeight,showTitle,Lottie,saveData} from '../communal'
 import *as fetch from '../netWork/fetch';
+import *as api from '../netWork/api';
 
+let url =  api.webProtol;
 class LoginPage extends Component {
 
     constructor(props){
@@ -68,6 +70,7 @@ class LoginPage extends Component {
         fetch.login(this.phoneNumber,this.imgCode,this.code).then((res)=>{
             this.lottie.show(false);
             showTitle('登录成功');
+            console.log('------------',this.phoneNumber);
             saveData('loginKey',this.phoneNumber).then(()=>{
                 DeviceEventEmitter.emit('loginAction',this.phoneNumber);
                 this.props.navigation.goBack();
@@ -121,7 +124,7 @@ class LoginPage extends Component {
                 </View>
                 </ScrollView>
                 <TouchableOpacity style={{flexDirection:'row',alignItems:'center',marginBottom:getPixel(10)}} onPress={()=>{
-                    this.props.navigation.push('Web',{webURL:'https://www.jianshu.com/p/4573b627f88c'});
+                    this.props.navigation.push('Web',{webURL:url});
                 }}>
                     <Text style={{fontSize:getPixel(12),color:'#999999'}}>登录即代表同意</Text>
                     <Text style={{fontSize:getPixel(12),color:'#1facec'}}>{"《安心花平台服务协议》"}</Text>
