@@ -41,7 +41,7 @@ class BrowseListPage extends Component {
                 }}/>
             <View style={styles.container}>
                 <FlatList data={this.state.data}
-                    renderItem={({item,index}) => <BrowseItemView key={index} item={item} click={()=>{
+                    renderItem={({item,index}) => <BrowseItemView key={`index=${index}`} item={item} click={()=>{
                         this.props.navigation.push('Web',{webURL:'https://www.hao123.com'});
                     }}/>} 
                     ListHeaderComponent={()=>{
@@ -66,7 +66,6 @@ export default BrowseListPage;
 class BrowseItemView extends Component{
     render(){
         const {item,click} = this.props;
-        console.log('------------',api.baseURL+'/'+item.recommendImage);
         return(
             <TouchableOpacity onPress={()=>{
                 click && click();
@@ -80,7 +79,7 @@ class BrowseItemView extends Component{
                 </View>
                 <View style={{width:screenWidth-getPixel(40),flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginVertical:getPixel(15)}}>
                     <View>
-                        <Text style={{fontSize:getPixel(17),color:'#ff3f3c',fontWeight: 'bold'}}>{30000}-{50000}</Text>
+                        <Text style={{fontSize:getPixel(17),color:'#ff3f3c',fontWeight: 'bold'}}>{item.loanLimitBegin}-{item.loanLimitEnd}</Text>
                         <Text style={{fontSize:getPixel(13),color:'#666666',marginTop:getPixel(5)}}>{'额度范围(元)'}</Text>
                     </View>
                     <View style={{paddingLeft:getPixel(15),borderLeftColor:'#f5f5f5',borderLeftWidth:getPixel(1.5)}}>

@@ -5,6 +5,7 @@ import {SafeAreaView} from 'react-navigation';
 import {getTitlePixel,NavigationHeadView,getData,screenWidth, getPixel} from '../communal';
 import {Lottie} from '../communal'
 
+let url =  "http://39.106.116.0/?tab=1";
 
 class HomePage extends Component {
         constructor(props){
@@ -15,17 +16,27 @@ class HomePage extends Component {
             }
         }
         componentDidMount(){
-
+          
             getData('loginKey').then(data=>{
-               this.setState({
+                if(data){
+                    url+="&mobile="+data;
+                }
+                this.setState({
                    phoneNumber:data
                })
+               
            });
            
-           this.loginAction = DeviceEventEmitter.addListener('loginAction', (msg) => {
-               this.setState({
-                   phoneNumber:msg
+           this.loginAction = DeviceEventEmitter.addListener('loginAction', (data) => {
+            if(data){
+                url+="&mobile="+data;
+            }
+            this.setState({
+                   phoneNumber:data
                })
+
+            // this.web.reload();
+
            });
        }
    
@@ -45,7 +56,7 @@ class HomePage extends Component {
                 <SafeAreaView style={[{
                         backgroundColor: 'white', flex: 1},this.state.request.navigationType=='click' &&{marginTop:getTitlePixel(64)}]}
                      forceInset={{top: this.state.request.navigationType=='click'?'never':'always', bottom: 'never'}}>
-                     <WebView ref={(ref)=>{this.web=ref}} source = { { uri:'http://39.106.116.0/?tab=1'} } 
+                     <WebView ref={(ref)=>{this.web=ref}} source = { { uri:url}}
                      onShouldStartLoadWithRequest={(request)=>{
                          console.log('------------',request);
                          if(!this.state.phoneNumber && request.navigationType=='click'){
